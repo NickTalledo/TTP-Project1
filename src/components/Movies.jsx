@@ -6,48 +6,22 @@ const Movies = ({ movies }) => {
   return (
     <>
       <Header />
-      {/* 
-      <table>
-        <thead>
-          <tr>
-            <th>Image</th>
-            <th>Title (year)</th>
-            <th>Director(s)</th>
-            <th>Length</th>
-            <th>Country</th>
-          </tr>
-        </thead>
-        <tbody>
-          {movies.map(({ title, year, director, length, country }) => {
-            return (
-              <tr key={`${title}${year}`}>
-                <td>
-                  {title} ({year})
-                </td>
-                <td>{director}</td>
-                <td>{length}</td>
-                <td>{country}</td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-      <br /> */}
       <div className="card-container">
         {movies.map((movie) => {
-          const {
-            image: { src, alt },
-            title,
-            director,
-            year,
-            genre,
-            length,
-            country,
-          } = movie;
+          const { image, title, director, year, genre, length, country } =
+            movie;
 
           return (
             <div key={title} className="card">
-              <img src={src} alt={alt} style={{ width: "75%" }} />
+              {image ? (
+                <img src={image.src} alt={image.alt} style={{ width: "75%" }} />
+              ) : (
+                <img
+                  src="https://placehold.co/300x400"
+                  alt="No company logo available"
+                />
+              )}
+
               <div className="container">
                 <h3>
                   <b>
@@ -88,3 +62,33 @@ Movies.propTypes = {
 };
 
 export default Movies;
+
+{
+  /* 
+      <table>
+        <thead>
+          <tr>
+            <th>Image</th>
+            <th>Title (year)</th>
+            <th>Director(s)</th>
+            <th>Length</th>
+            <th>Country</th>
+          </tr>
+        </thead>
+        <tbody>
+          {movies.map(({ title, year, director, length, country }) => {
+            return (
+              <tr key={`${title}${year}`}>
+                <td>
+                  {title} ({year})
+                </td>
+                <td>{director}</td>
+                <td>{length}</td>
+                <td>{country}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+      <br /> */
+}

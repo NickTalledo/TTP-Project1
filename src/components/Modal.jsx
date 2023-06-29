@@ -13,7 +13,7 @@ function Modal({ isVisible, hideModal, children }) {
       >
         <button
           onClick={hideModal}
-          className="text-black text-xl place-self-end bg-transparent"
+          className="text-white text-xl place-self-end bg-transparent"
         >
           X
         </button>

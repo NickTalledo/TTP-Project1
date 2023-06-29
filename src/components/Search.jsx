@@ -4,15 +4,18 @@ const Search = ({ search, setSearch }) => {
   };
 
   return (
-    <>
-      <label htmlFor="search">Search Query: </label>
+    <div className="items-center">
+      <label htmlFor="search" className="mr-2">
+        Search Movies:
+      </label>
       <input
         type="text"
         name="search"
+        className="border border-gray-300 px-2 py-1 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
         onChange={searchHandler}
         value={search}
       />
-    </>
+    </div>
   );
 };
 

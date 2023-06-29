@@ -5,12 +5,22 @@ import Movies from "./components/Movies";
 import movieData from "./utils/movies";
 import Search from "./components/Search";
 import Modal from "./components/Modal";
+import AddMovie from "./components/AddMovie";
 
 function App() {
   const [search, setSearch] = useState("");
   const [movies, setMovies] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [selectedStatus, setSelectedStatus] = useState(1);
+
+  useEffect(() => {
+    async function fetchMovies() {
+      const response = await fetch("http://localhost:3000/movieData");
+      const movies = await response.json();
+      setMovies(movies);
+    }
+
+    fetchMovies();
+  }, []);
 
   useEffect(() => {
     const moviesClone = [...movieData];
@@ -28,97 +38,29 @@ function App() {
     setIsModalVisible(false);
   };
 
-  const handleAddJobFormSubmit = (e) => {
-    e.preventDefault();
+  const onAddMovie = (newMovie) => {
+    hideModal();
+    setMovies((movies) => {
+      return [...movies, newMovie];
+    });
   };
+
   return (
     <>
       <h1>MovieBox</h1>
+      <br />
       <div>
         <button
-          className="bg-blue-500 px-4 py-5 hover:bg-blue-600 transition"
+          className="bg-blue-500 px-2 py-2 hover:bg-blue-600 transition"
           onClick={showModal}
         >
           + Add Movie
         </button>
       </div>
       <Modal isVisible={isModalVisible} hideModal={hideModal}>
-        <form
-          onSubmit={handleAddJobFormSubmit}
-          className="selection:bg-blue-200 flex flex-col gap-2"
-        >
-          <h2>Add Movie</h2>
-          <fieldset className="flex flex-col">
-            <label htmlFor="image">Movie Image URL: </label>
-            <input
-              type="url"
-              name="image"
-              id="image"
-              className="bg-white border-4 focus:outline-none p-2"
-            />
-          </fieldset>
-
-          <fieldset className="flex flex-col">
-            <label htmlFor="title">Movie Title: </label>
-            <input
-              type="text"
-              name="title"
-              id="title"
-              className="bg-white border-4 focus:outline-none p-2"
-            />
-          </fieldset>
-          <fieldset className="flex flex-col">
-            <label htmlFor="director">Director(s): </label>
-            <input
-              type="text"
-              name="director"
-              id="director"
-              className="bg-white border-4 focus:outline-none p-2"
-            />
-          </fieldset>
-          <fieldset className="flex flex-col">
-            <label htmlFor="year">Year: </label>
-            <input
-              type="number"
-              name="year"
-              id="year"
-              className="bg-white border-4 focus:outline-none p-2"
-            />
-          </fieldset>
-
-          <fieldset className="flex flex-col">
-            <label htmlFor="genre">Genre: </label>
-            <input
-              type="text"
-              name="genre"
-              id="genre"
-              className="bg-white border-4 focus:outline-none p-2"
-            />
-          </fieldset>
-          <fieldset className="flex flex-col">
-            <label htmlFor="length">Length: </label>
-            <input
-              type="number"
-              name="length"
-              id="length"
-              className="bg-white border-4 focus:outline-none p-2"
-            />
-          </fieldset>
-          <fieldset className="flex flex-col">
-            <label htmlFor="country">Country: </label>
-            <input
-              type="text"
-              name="country"
-              id="country"
-              className="bg-white border-4 focus:outline-none p-2"
-            />
-          </fieldset>
-          <input
-            className="bg-blue-500 hover:bg-blue-600 text-white transition mt-4 py-2 cursor-pointer "
-            type="submit"
-          ></input>
-        </form>
+        <AddMovie onAddMovie={onAddMovie} />
       </Modal>
+      <br />
       <Search search={search} setSearch={setSearch} />
       <br /> <br />
       <Movies movies={movies} />
