@@ -38,7 +38,7 @@ function AddMovie({ onAddMovie }) {
     });
     console.log("response", response);
     const savedMovie = await response.json();
-    console.log("savedJob", savedMovie);
+    console.log("savedMovie", savedMovie);
     onAddMovie(savedMovie);
   };
 
