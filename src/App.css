@@ -4,6 +4,10 @@
   text-align: center;
 }
 
+body {
+  background-image: url("https://www.courier-journal.com/gcdn/presto/2019/04/02/PLOU/febba588-ff5b-4277-b600-c4c76252c317-MotleyFool-TMOT-1c387926-06ba00e6.jpg?crop=2094,1185,x0,y0&width=1600&height=800&format=pjpg&auto=webp");
+}
+/* 
 nav ul {
   list-style-type: none;
   margin: 0;
@@ -35,17 +39,17 @@ nav {
   left: 0;
   width: 100%;
   height: 5%;
-}
-
+} */
+/* 
 .header {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   height: 60px;
-  background-color: #f0f0f0;
+  background-color: #ce0000;
   z-index: 9999;
-}
+} */
 
 .footer {
   position: fixed;
@@ -65,6 +69,7 @@ nav {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  background-color: rgb(23, 0, 1);
 }
 
 .card:hover {
@@ -83,4 +88,141 @@ nav {
 
 p {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+h2,
+h3,
+a {
+  color: #ffffff;
+}
+
+a {
+  text-decoration: none;
+}
+
+.logo {
+  margin: 0;
+  font-size: 1.45em;
+}
+
+.main-nav {
+  margin-top: 5px;
+  flex-grow: 1;
+}
+
+.logo a,
+.main-nav a {
+  padding: 10px 15px;
+  text-transform: uppercase;
+  text-align: center;
+  display: block;
+}
+
+.main-nav a {
+  color: #ffffff;
+  font-size: 0.99em;
+}
+
+.main-nav a:hover {
+  color: #718daa;
+}
+
+.header {
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  border: 1px solid #a2a2a2;
+  background-color: #000000;
+  -webkit-box-shadow: 0px 0px 14px 0px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 0px 0px 14px 0px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 0px 14px 0px rgba(0, 0, 0, 0.75);
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+}
+
+.burger-menu {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+@media (max-width: 767px) {
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    height: auto;
+  }
+
+  .logo {
+    margin-right: auto;
+  }
+
+  .main-nav {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    height: auto;
+    margin-top: 1rem;
+  }
+
+  .main-nav li {
+    margin-bottom: 1rem;
+  }
+
+  .main-nav a {
+    padding: 0.5rem 1rem;
+  }
+
+  .main-nav.block {
+    display: flex;
+  }
+
+  .main-nav.hidden {
+    display: none;
+  }
+}
+
+@media (min-width: 768px) {
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+  }
+
+  .logo {
+    order: 1;
+  }
+
+  .main-nav {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    order: 2;
+  }
+
+  .main-nav li {
+    margin-left: 1rem;
+  }
+
+  .main-nav a {
+    padding: 0.5rem 1rem;
+  }
 }

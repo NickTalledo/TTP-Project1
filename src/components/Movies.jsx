@@ -1,18 +1,17 @@
+import { Link } from "react-router-dom";
 import Footer from "./Footer";
-import Header from "./Header";
-import { PropTypes } from "prop-types";
+import PropTypes from "prop-types";
 
 const Movies = ({ movies }) => {
   return (
     <>
-      <Header />
       <div className="card-container">
         {movies.map((movie) => {
-          const { image, title, director, year, genre, length, country } =
+          const { id, image, title, director, year, genre, length, country } =
             movie;
 
           return (
-            <div key={title} className="card">
+            <Link to={`/movies/${id}/review`} key={id} className="card">
               {image ? (
                 <img src={image.src} alt={image.alt} style={{ width: "75%" }} />
               ) : (
@@ -34,7 +33,7 @@ const Movies = ({ movies }) => {
                 <p>Length: {length} mins</p>
                 <p>Country: {country}</p>
               </div>
-            </div>
+            </Link>
           );
         })}
       </div>
@@ -47,16 +46,17 @@ const Movies = ({ movies }) => {
 Movies.propTypes = {
   movies: PropTypes.arrayOf(
     PropTypes.shape({
+      id: PropTypes.number.isRequired,
       image: PropTypes.shape({
         src: PropTypes.string,
         alt: PropTypes.string,
       }),
-      title: PropTypes.string,
-      director: PropTypes.string,
-      year: PropTypes.number,
-      genre: PropTypes.string,
-      length: PropTypes.number,
-      country: PropTypes.string,
+      title: PropTypes.string.isRequired,
+      director: PropTypes.string.isRequired,
+      year: PropTypes.number.isRequired,
+      genre: PropTypes.string.isRequired,
+      length: PropTypes.number.isRequired,
+      country: PropTypes.string.isRequired,
     })
   ),
 };

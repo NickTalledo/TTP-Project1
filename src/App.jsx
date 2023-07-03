@@ -6,6 +6,7 @@ import movieData from "./utils/movies";
 import Search from "./components/Search";
 import Modal from "./components/Modal";
 import AddMovie from "./components/AddMovie";
+import Header from "./components/Header";
 
 function App() {
   const [search, setSearch] = useState("");
@@ -47,11 +48,14 @@ function App() {
 
   return (
     <>
-      <h1>MovieBox</h1>
+      <Header />
+      <h1>
+        <strong>MovieBox</strong>
+      </h1>
       <br />
       <div>
         <button
-          className="bg-blue-500 px-2 py-2 hover:bg-blue-600 transition"
+          className="bg-red-500 px-2 py-2 hover:bg-red-600 transition"
           onClick={showModal}
         >
           + Add Movie
