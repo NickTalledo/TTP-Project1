@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import "./index.css";
 import Movies from "./components/Movies";
-import movieData from "./utils/movies";
 import Search from "./components/Search";
 import Modal from "./components/Modal";
 import AddMovie from "./components/AddMovie";
@@ -11,25 +10,32 @@ import Header from "./components/Header";
 function App() {
   const [search, setSearch] = useState("");
   const [movies, setMovies] = useState([]);
+  // const [filteredMovies, setFilteredMovies] = useState(movies);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   useEffect(() => {
     async function fetchMovies() {
-      const response = await fetch("http://localhost:3000/movieData");
+      const response = await fetch("http://localhost:3000/movies");
       const movies = await response.json();
       setMovies(movies);
+      console.log(movies);
     }
 
     fetchMovies();
   }, []);
 
-  useEffect(() => {
-    const moviesClone = [...movieData];
-    const filteredMovies = moviesClone.filter((movies) => {
-      return movies.title.toUpperCase().includes(search.toUpperCase());
-    });
-    setMovies(filteredMovies);
-  }, [search]);
+  const filteredMovies = movies.filter((movies) => {
+    return movies.title.toUpperCase().includes(search.toUpperCase());
+  });
+
+  // useEffect(() => {
+  //   const moviesClone = [...movies];
+  //   setFilteredMovies([
+  //     ...moviesClone.filter((movies) => {
+  //       return movies.title.toUpperCase().includes(search.toUpperCase());
+  //     }),
+  //   ]);
+  // }, [search]);
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -67,7 +73,7 @@ function App() {
       <br />
       <Search search={search} setSearch={setSearch} />
       <br /> <br />
-      <Movies movies={movies} />
+      <Movies movies={filteredMovies} />
     </>
   );
 }

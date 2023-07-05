@@ -2,16 +2,26 @@ import { Link } from "react-router-dom";
 import Footer from "./Footer";
 import PropTypes from "prop-types";
 
+export async function loader({ params }) {
+  let url = "http://localhost:3000/movieData";
+  if (params.id) {
+    url += `?id=${[params.id]}`;
+  }
+  const response = await fetch(url);
+  const movies = await response.json();
+  return { movies };
+}
+
 const Movies = ({ movies }) => {
   return (
     <>
       <div className="card-container">
         {movies.map((movie) => {
-          const { id, image, title, director, year, genre, length, country } =
+          const { image, title, director, year, genre, length, country, id } =
             movie;
 
           return (
-            <Link to={`/movies/${id}/review`} key={id} className="card">
+            <Link to={`/movies/review/${id}`} key={id} className="card">
               {image ? (
                 <img src={image.src} alt={image.alt} style={{ width: "75%" }} />
               ) : (
@@ -46,7 +56,6 @@ const Movies = ({ movies }) => {
 Movies.propTypes = {
   movies: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.number.isRequired,
       image: PropTypes.shape({
         src: PropTypes.string,
         alt: PropTypes.string,
@@ -57,6 +66,7 @@ Movies.propTypes = {
       genre: PropTypes.string.isRequired,
       length: PropTypes.number.isRequired,
       country: PropTypes.string.isRequired,
+      id: PropTypes.number,
     })
   ),
 };

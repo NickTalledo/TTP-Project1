@@ -29,7 +29,7 @@ function AddMovie({ onAddMovie }) {
       year: parseInt(movieFormState.year),
       length: parseInt(movieFormState.length),
     };
-    const response = await fetch("http://localhost:3000/movieData", {
+    const response = await fetch("http://localhost:3000/movies", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

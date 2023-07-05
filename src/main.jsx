@@ -3,17 +3,41 @@ import * as ReactDOM from "react-dom/client";
 import App from "./App.jsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
-import Review from "./components/Review.jsx";
+import Review, {
+  loader as movieidLoader,
+  action as reviewAction,
+} from "./components/Review.jsx";
+import Movies, { loader as movieLoader } from "./components/Movies.jsx";
+import ErrorPage from "./components/ErrorPage.jsx";
+import EditMovie, {
+  loader as editMovieLoader,
+  action as editMovieAction,
+} from "./components/EditMovie.jsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
-    errorElement: <Review />,
+    errorElement: <ErrorPage />,
     children: [
       {
-        path: "/movies/${id}/review",
-        element: <Review />,
+        path: "/movies",
+        element: <Movies />,
+        loader: movieLoader,
+      },
+    ],
+  },
+  {
+    path: "/movies/review/:id",
+    element: <Review />,
+    loader: movieidLoader,
+    action: reviewAction,
+    children: [
+      {
+        path: "movies/:id/edit",
+        element: <EditMovie />,
+        loader: editMovieLoader,
+        action: editMovieAction,
       },
     ],
   },
@@ -24,14 +48,3 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <RouterProvider router={router} />
   </React.StrictMode>
 );
-
-// import React from 'react'
-// import ReactDOM from 'react-dom/client'
-// import App from './App.jsx'
-// import './index.css'
-
-// ReactDOM.createRoot(document.getElementById('root')).render(
-//   <React.StrictMode>
-//     <App />
-//   </React.StrictMode>,
-// )

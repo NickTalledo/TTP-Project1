@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { BiCameraMovie } from "react-icons/bi";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -11,13 +13,11 @@ const Header = () => {
     <nav className="bg-black">
       <header className="header">
         <div className="logo">
-          <a href="#">
-            <img
-              src="https://play-lh.googleusercontent.com/QsdI4sCsSi84gNzVbu6J6OCp4JLj2P78WocUQ5suSYGn7gvgHAuDmu1Hk3-KBMTeAb8"
-              alt="Flexbox Logo"
-              className="h-12"
-            />
-          </a>
+          <Link to="/movies">
+            <div className="flex items-center gap-2">
+              <BiCameraMovie /> Home
+            </div>
+          </Link>
         </div>
         <button
           className="burger-menu md:hidden"
@@ -46,17 +46,17 @@ const Header = () => {
         >
           <li>
             <a href="#" className="text-white">
-              Home
-            </a>
-          </li>
-          <li>
-            <a href="#" className="text-white">
               About
             </a>
           </li>
           <li>
             <a href="#" className="text-white">
-              Portfolio
+              Sign-in
+            </a>
+          </li>
+          <li>
+            <a href="#" className="text-white">
+              Register
             </a>
           </li>
           <li>

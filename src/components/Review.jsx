@@ -1,83 +1,138 @@
-import { useState } from "react";
-import { useParams } from "react-router-dom";
+import {
+  Form,
+  useLoaderData,
+  Link,
+  useFetcher,
+  Outlet,
+} from "react-router-dom";
 import Header from "./Header";
 import Footer from "./Footer";
+import { FaTrash } from "react-icons/fa";
 
-const Review = () => {
-  const { id } = useParams();
-  const [rating, setRating] = useState(0);
-  const [review, setReview] = useState("");
+export async function loader({ params }) {
+  const movieResponse = await fetch(
+    `http://localhost:3000/movies/${params.id}`
+  );
+  const movie = await movieResponse.json();
+  const reviewsResponse = await fetch(
+    `http://localhost:3000/reviews?id=${params.id}`
+  );
+  const reviews = await reviewsResponse.json();
+  return { movie, reviews };
+}
 
-  const handleRatingChange = (event) => {
-    setRating(parseInt(event.target.value));
+export async function action({ request, params }) {
+  const formData = await request.formData();
+  if (formData.get("action") === "deleteReview") {
+    const response = await fetch(
+      `http://localhost:3000/reviews/${formData.get("reviewId")}`,
+      { method: "DELETE" }
+    );
+    return { ok: true };
+  }
+  const preparedReview = {
+    ...Object.fromEntries(formData),
+    timestamp: new Date(),
+    id: parseInt(params.id),
+    name: formData.get("name"),
+    rating: parseInt(formData.get("rating")),
   };
+  const response = await fetch("http://localhost:3000/reviews", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(preparedReview),
+  });
+  const review = await response.json();
+  return { review };
+}
 
-  const handleReviewChange = (event) => {
-    setReview(event.target.value);
-  };
+function Review() {
+  const { movie, reviews } = useLoaderData();
+  const fetcher = useFetcher();
+  const { title, director, year, genre, length, country, id } = movie;
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-
-    console.log("Movie ID:", id);
-    console.log("Rating:", rating);
-    console.log("Review:", review);
-
-    setRating(0);
-    setReview("");
-  };
+  const renderedreviews = reviews.map((review) => {
+    return (
+      <div
+        key={review.id}
+        className="relative p-4 pb-6 bg-zinc-900 text-slate-50 rounded-md my-2 flex items-center"
+      >
+        <div className="flex-grow">
+          <p>
+            {review.rating} stars : <q>{review.content}</q> - {review.name}
+          </p>
+        </div>
+        <fetcher.Form
+          method="post"
+          onSubmit={(event) => {
+            if (!confirm("Please confirm you want to delete this record.")) {
+              event.preventDefault();
+            }
+          }}
+        >
+          <input type="hidden" name="action" value="deleteReview" />
+          <input type="hidden" name="reviewId" value={review.id} />
+          <button className="ml-4">
+            <FaTrash />
+          </button>
+        </fetcher.Form>
+      </div>
+    );
+  });
 
   return (
     <div>
-      <div className="bg-gray-100 min-h-screen">
-        <Header />
-        <div className="max-w-lg mx-auto p-6">
-          <h2 className="text-2xl font-bold mb-4 text-black">Leave a Review</h2>
-          <form onSubmit={handleSubmit}>
-            <div className="mb-4">
-              <label htmlFor="rating" className="font-semibold text-black">
-                Rating:
-              </label>
-              <select
-                id="rating"
-                value={rating}
-                onChange={handleRatingChange}
-                className="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-black"
-              >
-                <option value={0}>Select Rating</option>
-                <option value={1}>1 Star</option>
-                <option value={2}>2 Stars</option>
-                <option value={3}>3 Stars</option>
-                <option value={4}>4 Stars</option>
-                <option value={5}>5 Stars</option>
-              </select>
-            </div>
-
-            <div className="mb-4">
-              <label htmlFor="review" className="font-semibold text-black">
-                Review:
-              </label>
-              <textarea
-                id="review"
-                value={review}
-                onChange={handleReviewChange}
-                rows={4}
-                className="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-black"
-              />
-            </div>
-
-            <button
-              type="submit"
-              className="bg-indigo-500 text-white py-2 px-4 rounded-md shadow-sm hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-            >
-              Submit Review
-            </button>
-          </form>
+      <Header />
+      <div className="max-w-4xl mx-auto p-8">
+        <Link to="/">{"<"} Back</Link>
+        <div className="">
+          <h1>Title: {title}</h1>
+          <p>
+            <i>Director: {director}</i>
+          </p>
+          <p>Year: {year}</p>
+          <p>Genre: {genre}</p>
+          <p>Length: {length} mins</p>
+          <p>Country: {country}</p>
+          <Link to={`movies/${id}/edit`}>
+            <p className="text-xl py-2">Edit</p>
+          </Link>
+          <Outlet />
         </div>
+        <h2 className="text-xl my-2">Reviews</h2>
+        <Form className="my-4 flex gap-2" method="post">
+          <input
+            placeholder="name..."
+            className="flex-1 p-2 bg-black"
+            name="name"
+            required
+          />
+          <input
+            type="number"
+            placeholder="rate 1-5..."
+            className="flex-1 p-2 bg-black"
+            name="rating"
+            min="1"
+            max="5"
+            required
+          />
+          <input
+            placeholder="add a review..."
+            className="flex-1 p-2 bg-black"
+            name="content"
+            required
+          />
+          <button className="bg-red-500 px-3 text-2xl rounded-sm" type="submit">
+            +
+          </button>
+        </Form>
+        <div>{renderedreviews}</div>
       </div>
       <Footer />
     </div>
   );
-};
+}
 
 export default Review;
